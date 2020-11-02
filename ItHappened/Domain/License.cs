@@ -2,21 +2,15 @@
 
 namespace ItHappened.Domain
 {
-    public class License
+    public readonly struct License
     {
-        public LicenseType Type { get; set; }
-        public DateTime ExpiryDate { get; set; }
+        public LicenseType Type { get; }
+        public DateTime ExpiryDate { get; }
 
         public License(LicenseType type, DateTime expiryDate)
         {
             Type = type;
             ExpiryDate = expiryDate;
-        }
-        
-        public License()
-        {
-            Type = LicenseType.Free;
-            ExpiryDate = DateTime.Now;
         }
     }
 }

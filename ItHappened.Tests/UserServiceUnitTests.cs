@@ -111,7 +111,7 @@ namespace ItHappened.Tests
         [Test]
         public void EditUser_FormIsNotComplete_UserWasNotEdited()
         {
-            var form = new UserForm(null, null);
+            var form = new UserForm(null, null, new License());
             var initialName = "user";
             var user = EntityMaker.CreateSomeUser(_mockUserRepository, initialName);
             

@@ -7,10 +7,12 @@ namespace ItHappened.Application
         public string Username { get; }
         public string Password { get; }
         
-        public UserForm(string username, string password)
+        public License License { get; }
+        public UserForm(string username, string password, License license)
         {
             Username = username;
             Password = password;
+            License = license;
         }
     }
 }

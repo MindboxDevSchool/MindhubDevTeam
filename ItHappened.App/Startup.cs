@@ -1,6 +1,5 @@
 using System.Text;
 using ItHappened.App.Authentication;
-using ItHappened.App.Filters;
 using ItHappened.Application;
 using ItHappened.Domain;
 using ItHappened.Infrastructure;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -44,34 +42,19 @@ namespace ItHappened.App
                 });
             
             // Services registration
-            services.AddDbContext<CommonDbContext>(
-                builder => builder.UseSqlServer(
-                    Configuration
-                        .GetSection("Database")
-                        .GetValue<string>("ConnectionString")
-                    )
-                );
-            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddSingleton<IJwtIssuer, JwtIssuer>();
             
-            
-            services.AddScoped<IJwtIssuer, JwtIssuer>();
-            
-            // services.AddSingleton<IRepository<User>, InMemoryRepository<User>>();
+            services.AddSingleton<IRepository<User>, InMemoryRepository<User>>();
             services.AddSingleton<IRepository<Tracker>, InMemoryRepository<Tracker>>();
             services.AddSingleton<IRepository<Event>, InMemoryRepository<Event>>();
-            services.AddScoped<SaveChangesFilter>();
+
+            services.AddSingleton<IHasher, Sha256Hasher>();
             
-            
-            services.AddScoped<IHasher, Sha256Hasher>();
-            
-            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ITrackerService, TrackerService>();
             
             // Controllers registration
-            services.AddControllers(options =>
-            {
-                options.Filters.AddService<SaveChangesFilter>();
-            });
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
